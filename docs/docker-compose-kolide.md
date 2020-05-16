@@ -6,6 +6,11 @@ This project has a pre-defined JWT key of `super_secret_key_here` which should O
 1. `openssl rand -base64 32`
 1. Copy key and paste in `conf/kolide/kolide.yml` as the value for `jwt_key`
 
+## Generate OpenSSL certs
+1. If these do not exist
+1. `openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout conf/ssl/docker.key -out conf/ssl/docker.crt`
+1. `openssl dhparam -out conf/ssl/dhparam.pem 2048`
+
 ## Spin up stack
 1. `docker-compose -f docker-compose-kolide.yml build`
 1. `docker-compose run --rm kolide fleet prepare db --config /etc/kolide/kolide.yml`

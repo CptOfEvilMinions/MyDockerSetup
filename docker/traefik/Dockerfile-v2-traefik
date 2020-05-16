@@ -1,0 +1,9 @@
+FROM traefik:v2.2
+
+# Copy configs
+COPY conf/traefik/traefik.yml /etc/traefik/traefik.yml
+COPY conf/traefik/dyn.yaml /etc/traefik/dyn.yml
+
+# Copy SSL
+COPY conf/ssl/docker.crt /certs/traefik-cert
+COPY conf/ssl/docker.key /certs/traefik-key

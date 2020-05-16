@@ -1,0 +1,38 @@
+######################################## Log level ########################################
+log:
+  level: DEBUG
+
+######################################## Entrypoints ########################################
+# Redirect HTTP to HTTPS
+# https://docs.traefik.io/routing/entrypoints/#redirection
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+
+  websecure:
+    address: :443
+
+######################################## Enable API ########################################
+api:
+  # Dashboard
+  #
+  # Optional
+  # Default: true
+  #
+  dashboard: true
+
+
+######################################## Providers ########################################
+# https://docs.traefik.io/providers/docker/#exposedbydefault
+# https://docs.traefik.io/providers/docker/#provider-configuration
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false # Only expose explicitly enabled containers 
+  file:
+    filename: "/etc/traefik/dyn.yml"

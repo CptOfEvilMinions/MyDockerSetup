@@ -1,9 +1,0 @@
-FROM traefik:v1.7-alpine
-
-# Copy SSL
-RUN mkdir -p /etc/traefik/ssl
-COPY conf/ssl/docker.crt /etc/traefik/ssl/docker.crt 
-COPY conf/ssl/docker.key /etc/traefik/ssl/docker.key 
-
-# Copy config
-COPY conf/traefik/traefik-v2.toml /etc/traefik/traefik.toml

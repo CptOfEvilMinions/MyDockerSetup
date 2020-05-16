@@ -1,24 +1,30 @@
 version: "2.2"
-services: 
+services:
+  ######################################## Traefik ########################################
   traefik:
     build: 
       context: .
-      dockerfile: docker/Dockerfile-traefik
-    #container_name: 'traefik'
+      dockerfile: docker/traefik/Dockerfile-v2-traefik
+    container_name: "traefik"
     restart: unless-stopped
-    volumes: 
-      - /var/run/docker.sock:/var/run/docker.sock
+    labels: 
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`traefik.hackinglab.local`)"
+      - "traefik.http.routers.api.rule=PathPrefix(`/api`) || PathPrefix(`/dashboard`)"
+      - "traefik.http.routers.api.service=api@internal"
+      - "traefik.http.routers.api.tls=true"
     ports:
-      - 8000:80
-      - 8001:8080
-      - 8443:443
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    
+  ######################################## whomai ########################################
   whoami:
     image: "containous/whoami"
-    container_name: "simple-service"
+    container_name: "traefik-whoami"
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
-
-    
+      - "traefik.http.routers.whoami.rule=Host(`whoami.hackinglab.local`)"
+      - "traefik.http.routers.whoami.tls=true"

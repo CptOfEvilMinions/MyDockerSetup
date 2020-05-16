@@ -1,0 +1,102 @@
+version: "2.2"
+services: 
+  ############################################### Prometheus ###############################################
+  prometheus:
+    container_name: 'prometheus'
+    restart: unless-stopped
+    build: 
+      context: .
+      dockerfile: docker/monitoring/Dockerfile-prometheus
+    volumes: 
+      - prometheus-etc:/etc/prometheus/
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=prometheus"
+      - "traefik.frontend.rule=Host: prometheus.hackinglab.network"
+    networks: 
+      - default
+      - prom-gf-backend
+    cpus: 2
+    mem_limit: 300M
+
+  ############################################### Grafana ###############################################
+  grafana:
+    image: grafana/grafana:6.7.3
+    container_name: 'grafana'
+    restart: unless-stopped
+    user: "472"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=grafana"
+      - "traefik.port=3000"
+      - "traefik.frontend.rule=Host: grafana.hackinglab.network"
+    volumes: 
+      - grafana-data:/var/lib/grafana
+      - grafana-provisioning:/etc/grafana/provisioning/
+    networks: 
+      - default
+      - prom-gf-backend
+    ports: 
+      - 3000:3000
+    depends_on: 
+      - prometheus
+      - influxdb
+    cpus: 2
+    mem_limit: 300M
+
+  ############################################### InfluxDB ###############################################
+  influxdb:
+    image: influxdb:1.8.0-alpine
+    container_name: 'influxdb'
+    restart: unless-stopped
+    environment: 
+      - INFLUXDB_DB=db0
+      - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
+      - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
+      - INFLUXDB_USER=${INFLUXDB_USER}
+      - INFLUXDB_USER_PASSWORD=${INFLUXDB_USER_PASSWORD}
+    ports:
+      - 8086:8086
+    networks: 
+      - default
+      - prom-gf-backend
+    volumes: 
+      - influxdb-data:/var/lib/influxdb
+
+  ############################################### cAdvisor ###############################################
+  cadvisor:
+    image: google/cadvisor:latest
+    restart: unless-stopped
+    #container_name: 'cadvisor'
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    networks:
+      - prom-gf-backend
+
+  ############################################### Node-exporter ###############################################
+  node-exporter:
+    image: prom/node-exporter:latest
+    restart: unless-stopped
+    #container_name: 'node-exporter'
+    networks:
+      - prom-gf-backend
+
+networks: 
+  prom-gf-backend:
+
+volumes: 
+  prometheus-data:
+  prometheus-etc:
+  grafana-data:
+  grafana-provisioning:
+  influxdb-data:

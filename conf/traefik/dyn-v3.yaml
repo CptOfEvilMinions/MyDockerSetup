@@ -1,0 +1,27 @@
+######################################## TLS ########################################
+# https://docs.traefik.io/https/tls/#certificates-definition
+# https://docs.traefik.io/https/tls/#default-certificate
+# https://docs.traefik.io/https/tls/#tls-options
+
+# tls:
+#   stores:
+#     default:
+#       defaultCertificate:
+#         certFile: /certs/traefik-cert
+#         keyFile: /certs/traefik-key
+      # cipherSuites:
+      #   - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+
+  # # TLS versions
+  # options:
+  #   default:
+  #     minVersion: VersionTLS12
+  #   mintls13:
+  #    minVersion: VersionTLS13
+
+  tls:
+    stores:
+      default:
+        defaultCertificate:
+          certFile: "/run/secrets/traefik-ssl-crt"
+          keyFile: "/run/secrets/traefik-ssl-key"
