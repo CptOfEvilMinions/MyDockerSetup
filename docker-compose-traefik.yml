@@ -1,0 +1,24 @@
+version: "2.2"
+services: 
+  traefik:
+    build: 
+      context: .
+      dockerfile: docker/Dockerfile-traefik
+    #container_name: 'traefik'
+    restart: unless-stopped
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 8000:80
+      - 8001:8080
+      - 8443:443
+  whoami:
+    image: "containous/whoami"
+    container_name: "simple-service"
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+
+    

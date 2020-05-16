@@ -1,0 +1,5 @@
+ARG KOLIDE_FLEET_VERSION
+FROM kolide/fleet:${KOLIDE_FLEET_VERSION}
+RUN mkdir /etc/kolide
+COPY conf/kolide/kolide.yml /etc/kolide/kolide.yml
+CMD ["fleet", "serve", "--config", "/etc/kolide/kolide.yml"]

@@ -1,0 +1,3 @@
+ARG MYSQL_VERSION
+FROM mysql:${MYSQL_VERSION}
+COPY conf/kolide/mysql-kolide.cnf /etc/mysql/conf.d/kolide.cnf
