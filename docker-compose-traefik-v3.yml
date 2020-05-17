@@ -2,14 +2,15 @@ version: "3.3"
 services:
   ######################################## Traefik ########################################
   traefik:
-    image: traefik:v2.2
+    image: traefik:${TRAEFIK_VERSION}
     container_name: "traefik"
-    restart: unless-stopped
     configs: 
       - source: traefik-conf
         target: /etc/traefik/traefik.yml
       - source: traefik-dyn
         target: /etc/traefik/dyn.yml
+    networks: 
+      - traefik-net
     secrets:
       - traefik-ssl-key
       - traefik-ssl-crt
@@ -24,16 +25,42 @@ services:
       - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 300M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 120s
     
   ######################################## whomai ########################################
   whoami:
     image: "containous/whoami"
     container_name: "traefik-whoami"
     restart: unless-stopped
+    networks: 
+      - traefik-net
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=Host(`whoami.hackinglab.local`)"
       - "traefik.http.routers.whoami.tls=true"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 20M
+        reservations:
+          cpus: '0.1'
+          memory: 10M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 120s
 
 configs:
   traefik-conf:
@@ -41,6 +68,10 @@ configs:
   traefik-dyn:
     external: true
   
+networks: 
+  traefik-net:
+    driver: overlay
+    attachable: true
 
 secrets:
   traefik-ssl-key:

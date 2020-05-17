@@ -11,6 +11,8 @@ ROOT_LOGLEVEL=ERROR
 NGINX_VERSION=1.18.0-alpine
 MYSQL_VERSION=5.7
 KOLIDE_FLEET_VERSION=2.5.0
+TRAEFIK_VERSION=v2.2
+PROMETHEUS_VERSION=v2.18.0
 ```
 
 ## Generate OpenSSL certs
@@ -23,10 +25,7 @@ KOLIDE_FLEET_VERSION=2.5.0
 
 ## Docker-compose v3 stack commands
 1. `docker stack deploy -c <docker-compose file> <stack name>`
-1. `docker stack rm <stack name>`
+1. `docker stack ps <stack name>`
 
 ## Referenecs
 * [docker stack rm](https://docs.docker.com/engine/reference/commandline/stack_rm/)
-* []()
-* []()
-* []()

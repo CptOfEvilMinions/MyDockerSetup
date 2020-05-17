@@ -1,3 +1,4 @@
-FROM prom/prometheus:v2.18.0
+ARG PROMETHEUS_VERSION
+FROM prom/prometheus:${PROMETHEUS_VERSION}
 
 COPY conf/monitoring/prometheus.yml /etc/prometheus/prometheus.yml

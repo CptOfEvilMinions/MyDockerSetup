@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     build: 
       context: .
-      dockerfile: docker/Dockerfile-kafka-nginx
+      dockerfile: docker/kafka/Dockerfile-kafka-nginx
       args: 
         NGINX_VERSION: ${NGINX_VERSION}
     ports: 

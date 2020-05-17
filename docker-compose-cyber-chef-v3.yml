@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  cyberchef:
+    image: remnux/cyberchef:latest
+    container_name: cyberchef
+    restart: unless-stopped
+    networks: 
+      - traefik-v3_traefik-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cyberchef.rule=Host(`cyberchef.hackinglab.local`)"
+      - "traefik.http.routers.cyberchef.tls=true"
+
+networks: 
+  traefik-v3_traefik-net:
+    external: true

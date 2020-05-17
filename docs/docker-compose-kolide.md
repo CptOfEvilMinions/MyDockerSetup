@@ -13,7 +13,7 @@ This project has a pre-defined JWT key of `super_secret_key_here` which should O
 
 ## Spin up stack
 1. `docker-compose -f docker-compose-kolide.yml build`
-1. `docker-compose run --rm kolide fleet prepare db --config /etc/kolide/kolide.yml`
+1. `docker-compose -f docker-compose-kolide.yml run --rm kolide fleet prepare db --config /etc/kolide/kolide.yml`
   1. ![kolide fleet prepare db](../.img/kolide-init-db.png)
 1. `docker-compose -f docker-compose-kolide.yml up`
   1. ![Kolide docker-compose up](../.img/kolide-docker-up.png)

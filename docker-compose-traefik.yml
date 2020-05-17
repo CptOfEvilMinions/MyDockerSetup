@@ -5,8 +5,12 @@ services:
     build: 
       context: .
       dockerfile: docker/traefik/Dockerfile-v2-traefik
+      args:
+        TRAEFIK_VERSION: ${TRAEFIK_VERSION}
     container_name: "traefik"
     restart: unless-stopped
+    networks: 
+      - traefik-net
     labels: 
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`traefik.hackinglab.local`)"
@@ -24,7 +28,13 @@ services:
     image: "containous/whoami"
     container_name: "traefik-whoami"
     restart: unless-stopped
+    networks: 
+      - traefik-net
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=Host(`whoami.hackinglab.local`)"
       - "traefik.http.routers.whoami.tls=true"
+
+networks: 
+  traefik-net:
+

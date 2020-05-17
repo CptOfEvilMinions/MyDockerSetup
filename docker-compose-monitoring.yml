@@ -7,6 +7,8 @@ services:
     build: 
       context: .
       dockerfile: docker/monitoring/Dockerfile-prometheus
+      args: 
+        PROMETHEUS_VERSION: ${PROMETHEUS_VERSION}
     volumes: 
       - prometheus-etc:/etc/prometheus/
       - prometheus-data:/prometheus

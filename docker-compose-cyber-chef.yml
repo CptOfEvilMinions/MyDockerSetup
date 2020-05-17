@@ -1,0 +1,22 @@
+version: "2.2"
+services:
+  cyberchef:
+    image: remnux/cyberchef:latest
+    container_name: cyberchef
+    restart: unless-stopped
+    networks: 
+      - traefik-v3_traefik-net
+      #- mydockersetup_traefik-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cyberchef.rule=Host(`cyberchef.hackinglab.local`)"
+      - "traefik.http.routers.cyberchef.tls=true"
+    cpus: 2
+    mem_limit: 1G
+
+networks: 
+  traefik-v3_traefik-net:
+   external: true
+  # docker-compose-traefik.yml
+  #mydockersetup_traefik-net:
+  #  external: true

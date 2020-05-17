@@ -1,6 +1,6 @@
 # NGINX config
 
-Below is the base config used to config NGINX running on Alpine. You could create a docker config for all NGINX deployments using the config below. In fact, all the Docker stacks that utilize NGINX in this repo use the same base config of `conf/nginx/nginx.conf`.
+Below is the base config used to run NGINX running on Alpine. You could create a `Docker config` for all NGINX deployments using the config below. In fact, all the Docker stacks that utilize NGINX in this repo use the same base config of `conf/nginx/nginx.conf`.
 
 The benefits of this are:
 * Specifying default good security values like using TLS v1.2+, only accepting certain ciphers
@@ -37,14 +37,14 @@ http {
 	# SSL Settings
 	##
 	ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_prefer_server_ciphers on;
-    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+  ssl_prefer_server_ciphers on;
+  ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
 	ssl_ecdh_curve secp384r1; 
 	
 	# SSL cert
 	ssl_certificate /etc/nginx/ssl/nginx.crt;
-    ssl_certificate_key /etc/nginx/ssl/nginx.key;
-    ssl_dhparam /etc/nginx/ssl/dhparam.pem;	
+  ssl_certificate_key /etc/nginx/ssl/nginx.key;
+  ssl_dhparam /etc/nginx/ssl/dhparam.pem;	
 
 	ssl_session_timeout  10m;
 	ssl_session_cache shared:SSL:10m;
